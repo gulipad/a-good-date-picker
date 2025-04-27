@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Natural‑Language Date Picker 🤖📅
 
-## Getting Started
+> **Stop double‑clicking your way to 2042.**
+>
+> Type _"next Friday"_, press ↵, go live your life.
 
-First, run the development server:
+The humble date‑picker hasn't evolved much since jQuery UI. We still poke at tiny arrows to escape the current month like frantic Minesweeper players. This natural language date picker fixes that: it lets your users speak calendar‑ese in plain English, while still giving them a pretty calendar to fall back on.
+
+_(It's basically the child of **shadcn/ui** components and **chrono‑node**'s time‑travel super‑powers.)_
+
+---
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Install dependencies
+npm i chrono-node date-fns lucide-react react-day-picker
+
+# 2. Make sure you have shadcn/ui set up (see Prerequisites below 👇)
+
+# 3. Copy the component
+cp path/to/nl-date-picker.tsx your‑project/components/ui/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+That's it. Import the component and enjoy:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```tsx
+import { NaturalLanguageDatePicker } from "@/components/ui/nl-date-picker";
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+export default function Example() {
+  const [date, setDate] = React.useState<Date>();
+  return <NaturalLanguageDatePicker value={date} onChange={setDate} />;
+}
+```
 
-## Learn More
+_(The component is self‑contained; `value`/`onChange` are optional if you're cool with internal state.)_
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Why Should I Care?
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| 🎯 Traditional pickers                             | 🚀 **Natural Language Picker**  |
+| -------------------------------------------------- | ------------------------------- |
+| Endless clicks to reach 18 months away             | One ⌨️ stroke: `"+18 months"`   |
+| Hard to type on mobile, even harder to tab through | Accessible input _and_ calendar |
+| Users must think like a computer                   | Lets people speak like people   |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## The Recipe 🍳
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. Prerequisites
+
+- **React 18** (Next.js ≥ 13 works great)
+- **Tailwind CSS 3** configured
+- **shadcn/ui** set up (`npx shadcn-ui@latest init`)
+  - Required components:
+    - `npx shadcn-ui@latest add button`
+    - `npx shadcn-ui@latest add input`
+    - `npx shadcn-ui@latest add popover`
+    - `npx shadcn-ui@latest add calendar`
+
+### 2. Dependencies
+
+```bash
+npm i chrono-node date-fns lucide-react react-day-picker
+```
+
+> **Heads‑up**: the component imports `cn` from `@/lib/utils` (a shadcn/ui utility).
+> This should be set up during shadcn/ui initialization, but if you need it:
+
+```ts
+// lib/utils.ts
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+### 3. Drop the Component In
+
+Place **`nl-date-picker.tsx`** in your components directory (we use `components/ui`). Make sure path aliases match your setup. The component is named `NaturalLanguageDatePicker` - you can rename it during import if you prefer something shorter.
+
+---
+
+## Props
+
+| Prop                                                       | Type                    | Default | Description                 |
+| ---------------------------------------------------------- | ----------------------- | ------- | --------------------------- |
+| `value`                                                    | `Date \| undefined`     | —       | Controlled value            |
+| `onChange`                                                 | `(date?: Date) => void` | —       | Callback fired on selection |
+| \*…plus any props from the underlying shadcn **Popover\*** | —                       | —       | Pass‑through props          |
+
+_(Need something else? PRs welcome – or just fork and hack away.)_
+
+---
+
+## Customising ✨
+
+- **Styling** – It's Tailwind all the way down. Tweak classes right in the file or wrap the component.
+- **Locales** – Swap `date-fns/format` for `formatInTimeZone` or your i18n flavour.
+- **Parsing** – `chrono-node` already understands _"next Thursday at 6 pm CET"_. Extend its grammar if your users speak in riddles.
+- **Natural Language** - Some examples that work out of the box:
+  - "next Friday"
+  - "in 2 weeks"
+  - "tomorrow at 3pm"
+  - "next month"
+  - "+3 months"
+  - "2024-03-15"
+
+---
+
+## Contributing
+
+1. `git clone` this repo
+2. `npm i && npm run dev` – open <http://localhost:3000>
+3. Make magic ➡️ `git commit -m "feat: dragons can pick dates too"`
+
+---
+
+## License
+
+MIT – because date picking should be free (and painless).
