@@ -10,6 +10,12 @@ _(It's basically the child of **shadcn/ui** components and **chrono‑node**'s t
 
 ---
 
+## Demo
+
+![Natural Language Date Picker Demo](demo.gif)
+
+---
+
 ## Quick Start
 
 ```bash
